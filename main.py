@@ -20,7 +20,7 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
-                if event_number <= 1 or event_number >= 3:
+                if event_number <= 1 or 3 <= event_number <= 10:
                     event_number += 1
                 elif event_number == 2 and p1_textbox.text != "" and p2_textbox.text != "":
                     event_number += 1
@@ -101,5 +101,77 @@ while running:
         pygame.draw.rect(wd, pygame.Color(155, 118, 83), pygame.Rect(300, 90, 50, 20))
         pygame.draw.rect(wd, pygame.Color(155, 118, 83), pygame.Rect(450, 90, 50, 20))
         pygame.draw.rect(wd, pygame.Color(155, 118, 83), pygame.Rect(600, 90, 50, 20))
-    
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("Mỗi địa điểm trên bản đồ có 1 cái tháp:", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 160))
+        
+        text_surface = pygame.font.SysFont("Consolas", 16).render(f"- Tháp của Hà Nội và Thanh Hóa là của {p1_textbox.text}", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (10, 176))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render(f"- Tháp của Đắk Lắk và Sài Gòn là của {p2_textbox.text}", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (10, 192))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("- Tháp của Huế chưa là của ai", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (10, 208))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("Nhấn enter để tiếp tục...", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 224))
+    elif event_number == 5:
+        text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 16).render("Có 3 trường hợp có thể xảy ra:", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 0))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("1. Bạn đang ở địa điểm có tháp của bạn", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (10, 16))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("2. Bạn đang ở địa điểm có tháp của đối thủ", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (10, 32))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("3. Bạn đang ở địa điểm có tháp không có người sở hữu", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (10, 48))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("Nhấn enter để tiếp tục...", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 64))
+    elif event_number == 6:
+        text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 16).render("Nếu bạn đang ở địa điểm có tháp của bạn, thì bạn có thể hồi máu và nâng cấp các thuộc", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 0))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("tính của bạn", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 16))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("Nhấn enter để tiếp tục...", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 32))
+    elif event_number == 7:
+        text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 16).render("Nếu bạn đang ở địa điểm có tháp của đối thủ, thì bạn sẽ bị mất máu, không thể hồi máu và", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 0))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("nâng cấp các thuộc tính của bạn", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 16))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("Nhấn enter để tiếp tục...", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 32))
+    elif event_number == 8:
+        text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 16).render("Nếu bạn đang ở địa điểm có tháp không có chủ sở hữu, thì bạn sẽ không thể hồi máu và nâng", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 0))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("cấp các thuộc tính của bạn nhưng cũng không mất máu", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 16))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("Nhấn enter để tiếp tục...", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 32))
+    elif event_number == 9:
+        text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 16).render(f"Nhiệm vụ của {p1_textbox.text} là chiếm tháp của Sài Gòn", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 0))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render(f"Còn nhiệm vụ của {p2_textbox.text} là chiếm tháp của Hà Nội", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 16))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("Nhấn enter để tiếp tục...", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 32))
+    elif event_number == 10:
+        text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 16).render("Chúc may mắn...", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 0))
+
+        text_surface = pygame.font.SysFont("Consolas", 16).render("Nhấn enter để tiếp tục...", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 16))
+
     pygame.display.flip()
