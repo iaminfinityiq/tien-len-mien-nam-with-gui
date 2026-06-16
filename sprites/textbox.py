@@ -1,4 +1,4 @@
-from sprites.sprite import Sprite
+from .sprite import Sprite
 import pygame
 
 class TextBox(Sprite):

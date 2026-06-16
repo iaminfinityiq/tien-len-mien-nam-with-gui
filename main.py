@@ -173,5 +173,7 @@ while running:
 
         text_surface = pygame.font.SysFont("Consolas", 16).render("Nhấn enter để tiếp tục...", True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (0, 16))
+    else:
+        pass
 
     pygame.display.flip()
