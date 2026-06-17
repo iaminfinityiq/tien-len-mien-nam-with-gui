@@ -1,5 +1,7 @@
 import pygame
 from sprites.textbox import TextBox
+from game.game import Game
+from game.place import Place
 
 pygame.init()
 
@@ -11,6 +13,9 @@ running: bool = True
 event_number: int = 0
 p1_textbox: TextBox = TextBox(36, 16, 290, 26, pygame.Color(255, 0, 0), pygame.Color(0, 0, 0), "Consolas", 16, 30)
 p2_textbox: TextBox = TextBox(36, 47, 290, 26, pygame.Color(0, 0, 255), pygame.Color(0, 0, 0), "Consolas", 16, 30)
+
+current_game: Game = Game(p1_textbox.text, p2_textbox.text)
+current_scene: Place = current_game.map
 
 while running:
     clock.tick(60)
@@ -27,6 +32,12 @@ while running:
             elif event_number == 2:
                 p1_textbox.handle_event(event)
                 p2_textbox.handle_event(event)
+            elif event_number == 11:
+                if (event.key == pygame.K_d or event.key == pygame.K_RIGHT) and current_scene.next is not None:
+                    current_scene = current_scene.next
+                
+                if (event.key == pygame.K_a or event.key == pygame.K_LEFT) and current_scene.previous is not None:
+                    current_scene = current_scene.previous
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event_number == 2:
                 p1_textbox.handle_event(event)
@@ -79,8 +90,8 @@ while running:
         pygame.draw.rect(wd, pygame.Color(135, 206, 250), pygame.Rect(50, 50, 100, 100))
         pygame.draw.rect(wd, pygame.Color(140, 255, 155), pygame.Rect(200, 50, 100, 100))
         pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(350, 50, 100, 100))
-        pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(500, 50, 100, 100))
-        pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(650, 50, 100, 100))
+        pygame.draw.rect(wd, pygame.Color(153, 0, 76), pygame.Rect(500, 50, 100, 100))
+        pygame.draw.rect(wd, pygame.Color(102, 0, 51), pygame.Rect(650, 50, 100, 100))
 
         text_surface = pygame.font.SysFont("Consolas", 16).render("Hà Nội", True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (73, 92))
@@ -91,10 +102,10 @@ while running:
         text_surface = pygame.font.SysFont("Consolas", 16).render("Huế", True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (386, 92))
         
-        text_surface = pygame.font.SysFont("Consolas", 16).render("Đắk Lắk", True, pygame.Color(0, 0, 0))
+        text_surface = pygame.font.SysFont("Consolas", 16).render("Đắk Lắk", True, pygame.Color(255, 255, 255))
         wd.blit(text_surface, (518, 92))
 
-        text_surface = pygame.font.SysFont("Consolas", 16).render("Sài Gòn", True, pygame.Color(0, 0, 0))
+        text_surface = pygame.font.SysFont("Consolas", 16).render("Sài Gòn", True, pygame.Color(255, 255, 255))
         wd.blit(text_surface, (668, 92))
 
         pygame.draw.rect(wd, pygame.Color(155, 118, 83), pygame.Rect(150, 90, 50, 20))
@@ -174,6 +185,6 @@ while running:
         text_surface = pygame.font.SysFont("Consolas", 16).render("Nhấn enter để tiếp tục...", True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (0, 16))
     else:
-        pass
+        current_game.render_scene(wd, current_scene)
 
     pygame.display.flip()

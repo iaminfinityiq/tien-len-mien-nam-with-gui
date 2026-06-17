@@ -1,13 +1,19 @@
+from __future__ import annotations
 from .entity import Entity
 from .player import Player
-from typing import List
+from typing import List, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .player import Player
 
 class Place(Entity):
-    def __init__(self, name: str, tower_owner: Player | None, players: List[Player]) -> None:
+    def __init__(self, name: str, tower_owner: Player | None, players: List[Player], previous: Place | None, next: Place | None) -> None:
         super().__init__(name, 100000, 1000)
         self.tower_owner: Player | None = tower_owner
         self.players: List[Player] = players
         self.who_poisoned_last: Player | None = None
+        self.previous: Place | None = previous
+        self.next: Place | None = next
     
     def before_turn(self) -> None:
         super().before_turn()
@@ -24,3 +30,10 @@ class Place(Entity):
                     self.damage(player)
                     if player.dead():
                         player.death_trigger(f"{player.name} đã gục ngã trước phòng thủ của {self.name}")
+    
+    def respawn(self) -> None:
+        self.hp = 100000
+    
+    def death_trigger(self, death_message: str) -> None:
+        super().death_trigger(death_message)
+        self.respawn()

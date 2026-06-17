@@ -30,3 +30,6 @@ class Entity:
     def death_trigger(self, death_message: str) -> None:
         engine.say(death_message)
         engine.runAndWait()
+    
+    def respawn(self) -> None:
+        pass
