@@ -1,6 +1,6 @@
 from .place import Place
 from .player import Player
-from typing import List
+from typing import List, Dict
 import pygame
 
 class Game:
@@ -17,6 +17,13 @@ class Game:
         saigon: Place = Place("Sài Gòn", self.players[1], [self.players[1]], None, None)
 
         self.spawn_points: List[Place] = [hanoi, saigon]
+        self.player_y_dict: Dict[Place, int] = {
+            hanoi:450,
+            thanh_hoa: 350,
+            hue: 350,
+            daklak: 300,
+            saigon: 420
+        }
         
         hanoi.next = thanh_hoa
         thanh_hoa.previous = hanoi
@@ -101,46 +108,24 @@ class Game:
                 pygame.draw.circle(wd, pygame.Color(255, 0, 0), (400, 390), 20)
         elif scene.name == "Đắk Lắk":
             wd.fill(pygame.Color(153, 0, 76))
-
-            # Smoke layers (depth)
             pygame.draw.rect(wd, pygame.Color(120, 0, 60), pygame.Rect(0, 250, 800, 600))
             pygame.draw.rect(wd, pygame.Color(90, 0, 50), pygame.Rect(0, 400, 800, 400))
-
-            # Ground (battlefield soil)
             pygame.draw.rect(wd, pygame.Color(60, 0, 35), pygame.Rect(0, 520, 800, 280))
-
-            # Craters
             for x in range(60, 800, 140):
                 pygame.draw.circle(wd, pygame.Color(30, 0, 20), (x, 600), 28)
                 pygame.draw.circle(wd, pygame.Color(25, 0, 15), (x + 40, 650), 20)
 
-            # Burning zones (fires)
             for x in range(120, 800, 220):
-                pygame.draw.polygon(
-                    wd,
-                    pygame.Color(200, 80, 0),
-                    [(x, 580), (x + 20, 520), (x + 40, 580)]
-                )
-                pygame.draw.polygon(
-                    wd,
-                    pygame.Color(255, 140, 0),
-                    [(x + 10, 570), (x + 20, 540), (x + 30, 570)]
-                )
+                pygame.draw.polygon(wd, pygame.Color(200, 80, 0), [(x, 580), (x + 20, 520), (x + 40, 580)])
+                pygame.draw.polygon(wd, pygame.Color(255, 140, 0), [(x + 10, 570), (x + 20, 540), (x + 30, 570)])
 
-            # Smoke pillars
             for x in range(80, 800, 160):
-                pygame.draw.rect(
-                    wd,
-                    pygame.Color(40, 40, 40),
-                    pygame.Rect(x, 280, 18, 260)
-                )
+                pygame.draw.rect(wd, pygame.Color(40, 40, 40), pygame.Rect(x, 280, 18, 260))
 
-            # Destroyed structures (silhouettes)
             pygame.draw.rect(wd, pygame.Color(20, 0, 15), pygame.Rect(480, 430, 170, 90))
             pygame.draw.rect(wd, pygame.Color(20, 0, 15), pygame.Rect(450, 460, 60, 40))
             pygame.draw.polygon(wd, pygame.Color(20, 0, 15), [(520, 430), (560, 390), (600, 430)])
 
-            # Tower system (UNCHANGED)
             if scene.tower_owner is None:
                 pygame.draw.circle(wd, pygame.Color(128, 128, 128), (565, 475), 20)
             elif scene.tower_owner is self.players[self.turn]:
@@ -170,6 +155,18 @@ class Game:
                 pygame.draw.circle(wd, pygame.Color(0, 0, 255), (400, 465), 20)
             else:
                 pygame.draw.circle(wd, pygame.Color(255, 0, 0), (400, 465), 20)
+        
+        if self.players[0] in scene.players:
+            if self.turn == 0:
+                pygame.draw.rect(wd, pygame.Color(0, 0, 255), pygame.Rect(0, self.player_y_dict[scene], 100, 100))
+            else:
+                pygame.draw.rect(wd, pygame.Color(255, 0, 0), pygame.Rect(0, self.player_y_dict[scene], 100, 100))
+        
+        if self.players[1] in scene.players:
+            if self.turn == 1:
+                pygame.draw.rect(wd, pygame.Color(0, 0, 255), pygame.Rect(700, self.player_y_dict[scene], 100, 100))
+            else:
+                pygame.draw.rect(wd, pygame.Color(255, 0, 0), pygame.Rect(700, self.player_y_dict[scene], 100, 100))
         
         text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 32, True).render(scene.name, True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (0, 0))

@@ -13,7 +13,6 @@ running: bool = True
 event_number: int = 0
 p1_textbox: TextBox = TextBox(36, 16, 290, 26, pygame.Color(255, 0, 0), pygame.Color(0, 0, 0), "Consolas", 16, 30)
 p2_textbox: TextBox = TextBox(36, 47, 290, 26, pygame.Color(0, 0, 255), pygame.Color(0, 0, 0), "Consolas", 16, 30)
-
 current_game: Game = Game(p1_textbox.text, p2_textbox.text)
 current_scene: Place = current_game.map
 
