@@ -2,6 +2,7 @@ import pygame
 from sprites.textbox import TextBox
 from game.game import Game
 from game.place import Place
+from typing import Tuple
 
 pygame.init()
 
@@ -13,8 +14,7 @@ running: bool = True
 event_number: int = 0
 p1_textbox: TextBox = TextBox(36, 16, 290, 26, pygame.Color(255, 0, 0), pygame.Color(0, 0, 0), "Consolas", 16, 30)
 p2_textbox: TextBox = TextBox(36, 47, 290, 26, pygame.Color(0, 0, 255), pygame.Color(0, 0, 0), "Consolas", 16, 30)
-current_game: Game = Game(p1_textbox.text, p2_textbox.text)
-current_scene: Place = current_game.map
+finished_running: bool = True
 
 while running:
     clock.tick(60)
@@ -41,6 +41,15 @@ while running:
             if event_number == 2:
                 p1_textbox.handle_event(event)
                 p2_textbox.handle_event(event)
+            elif event_number == 11:
+                mouse: Tuple[int, int] = pygame.mouse.get_pos()
+                if current_game.players[current_game.turn].dead():
+                    finished_running = True
+                elif (current_scene is current_game.players[current_game.turn].at.next or current_scene is current_game.players[current_game.turn].at.previous) and 350 <= mouse[0] <= 450 and 50 <= mouse[1] <= 150:
+                    current_game.players[current_game.turn].at.players.remove(current_game.players[current_game.turn])
+                    current_game.players[current_game.turn].at = current_scene
+                    current_scene.players += [current_game.players[current_game.turn]]
+                    finished_running = True
     
     wd.fill(pygame.Color(255, 255, 255))
     if event_number == 0:
@@ -71,6 +80,7 @@ while running:
         text_surface = pygame.font.SysFont("Consolas", 16).render("Nhấn enter để tiếp tục...", True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (0, 87))
     elif event_number == 3:
+        current_game: Game = Game(p1_textbox.text, p2_textbox.text)
         text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 16).render("Trước tiên, trò này cần có 2 người chơi", True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (0, 0))
 
@@ -184,6 +194,12 @@ while running:
         text_surface = pygame.font.SysFont("Consolas", 16).render("Nhấn enter để tiếp tục...", True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (0, 16))
     else:
+        if finished_running:
+            current_game.before_turn()
+            current_game.after_turn()
+            finished_running = False
+            current_scene: Place = current_game.players[current_game.turn].at
+
         current_game.render_scene(wd, current_scene)
 
     pygame.display.flip()

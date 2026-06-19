@@ -1,13 +1,33 @@
 from .place import Place
 from .player import Player
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import pygame
+from .voice import speak
+import asyncio
+
+def integer_to_text(n: int) -> str:
+    if n < 1000:
+        return str(n)
+
+    if n < 1_000_000:
+        return f"{n / 1000:.1f}K"
+
+    if n < 1_000_000_000:
+        return f"{n / 1_000_000:.1f}M"
+
+    if n < 1_000_000_000_000:
+        return f"{n / 1_000_000_000:.1f}B"
+
+    if n < 1_000_000_000_000_000:
+        return f"{n / 1_000_000_000_000:.1f}T"
+
+    return "999.9T+"
 
 class Game:
     def __init__(self, p1_name: str, p2_name: str) -> None:
         self.players: List[Player] = [Player(p1_name), Player(p2_name)]
         self.map: Place = self.map_generation()
-        self.turn: int = 0
+        self.turn: int = 1
     
     def map_generation(self) -> Place:
         hanoi: Place = Place("Hà Nội", self.players[0], [self.players[0]], None, None)
@@ -15,13 +35,15 @@ class Game:
         hue: Place = Place("Huế", None, [], None, None)
         daklak: Place = Place("Đắk Lắk", self.players[1], [], None, None)
         saigon: Place = Place("Sài Gòn", self.players[1], [self.players[1]], None, None)
+        self.players[0].at = hanoi
+        self.players[1].at = saigon
 
         self.spawn_points: List[Place] = [hanoi, saigon]
         self.player_y_dict: Dict[Place, int] = {
-            hanoi:450,
+            hanoi: 450,
             thanh_hoa: 350,
             hue: 350,
-            daklak: 300,
+            daklak: 420,
             saigon: 420
         }
         
@@ -52,13 +74,26 @@ class Game:
             player.before_turn()
             if past_death_time == 1:
                 player.at = self.spawn_points[i]
+                self.spawn_points[i].players += [player]
         
         current: Place = self.map
         while current != None:
             current.before_turn()
             current = current.next
     
+    def after_turn(self) -> None:
+        self.turn = 1 - self.turn
+        asyncio.run(speak(f"Đang là lượt của {self.players[self.turn].name}"))
+
     def render_scene(self, wd: pygame.Surface, scene: Place) -> None:
+        if scene is None:
+            text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 16).render(f"{self.players[self.turn].name}, bạn đã chết, vui lòng đợi một lát để được hồi sinh", True, pygame.Color(0, 0, 0))
+            wd.blit(text_surface, (0, 0))
+
+            text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 16).render(f"Nhấn bất kỳ đâu trên màn hình để tiếp tục...", True, pygame.Color(0, 0, 0))
+            wd.blit(text_surface, (0, 16))
+            return
+        
         if scene.name == "Hà Nội":
             wd.fill(pygame.Color(135, 206, 250))
             pygame.draw.circle(wd, pygame.Color(255, 255, 0), (800, 0), 200)
@@ -156,17 +191,49 @@ class Game:
             else:
                 pygame.draw.circle(wd, pygame.Color(255, 0, 0), (400, 465), 20)
         
-        if self.players[0] in scene.players:
+        mouse_pos: Tuple[int, int] = pygame.mouse.get_pos()
+        if not self.players[0].dead() and self.players[0] in scene.players:
             if self.turn == 0:
                 pygame.draw.rect(wd, pygame.Color(0, 0, 255), pygame.Rect(0, self.player_y_dict[scene], 100, 100))
             else:
                 pygame.draw.rect(wd, pygame.Color(255, 0, 0), pygame.Rect(0, self.player_y_dict[scene], 100, 100))
+            
+            pygame.draw.rect(wd, pygame.Color(255, 127, 127), pygame.Rect(0, self.player_y_dict[scene] - 40, 100, 20))
+            pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(0, self.player_y_dict[scene] - 40, self.players[0].hp*100//self.players[0].max_hp, 20))
+            if 0 <= mouse_pos[0] <= 100 and self.player_y_dict[scene] <= mouse_pos[1] <= self.player_y_dict[scene] + 100:
+                pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(100, self.player_y_dict[scene], 100, 200))
+                text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render(f"HP: {integer_to_text(self.players[0].hp)}/{integer_to_text(self.players[0].max_hp)}", True, pygame.Color(0, 0, 0))
+                wd.blit(text_surface, (105, self.player_y_dict[scene] + 5))
+
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Công: {self.players[0].damage}", True, pygame.Color(0, 0, 0))
+                wd.blit(text_surface, (105, self.player_y_dict[scene] + 20))
+
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Độc: {self.players[0].poison_damage}", True, pygame.Color(0, 0, 0))
+                wd.blit(text_surface, (105, self.player_y_dict[scene] + 35))
         
-        if self.players[1] in scene.players:
+        if not self.players[1].dead() and self.players[1] in scene.players:
             if self.turn == 1:
                 pygame.draw.rect(wd, pygame.Color(0, 0, 255), pygame.Rect(700, self.player_y_dict[scene], 100, 100))
             else:
                 pygame.draw.rect(wd, pygame.Color(255, 0, 0), pygame.Rect(700, self.player_y_dict[scene], 100, 100))
+            
+            pygame.draw.rect(wd, pygame.Color(255, 127, 127), pygame.Rect(700, self.player_y_dict[scene] - 40, 100, 20))
+            pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(700, self.player_y_dict[scene] - 40, self.players[1].hp*100//self.players[1].max_hp, 20))
+            if 700 <= mouse_pos[0] <= 800 and self.player_y_dict[scene] <= mouse_pos[1] <= self.player_y_dict[scene] + 100:
+                pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(600, self.player_y_dict[scene], 100, 200))
+                text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render(f"HP: {integer_to_text(self.players[1].hp)}/{integer_to_text(self.players[1].max_hp)}", True, pygame.Color(0, 0, 0))
+                wd.blit(text_surface, (605, self.player_y_dict[scene] + 5))
+
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Công: {self.players[1].damage}", True, pygame.Color(0, 0, 0))
+                wd.blit(text_surface, (605, self.player_y_dict[scene] + 20))
+
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Độc: {self.players[1].poison_damage}", True, pygame.Color(0, 0, 0))
+                wd.blit(text_surface, (605, self.player_y_dict[scene] + 35))
         
+        if self.players[self.turn].at.next is scene:
+            pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(350, 50, 100, 100))
+        elif self.players[self.turn].at.previous is scene:
+            pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(350, 50, 100, 100))
+
         text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 32, True).render(scene.name, True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (0, 0))

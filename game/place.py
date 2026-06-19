@@ -27,7 +27,7 @@ class Place(Entity):
         if self.tower_owner is not None:
             for player in self.players:
                 if player is not self.tower_owner:
-                    self.damage(player)
+                    self.attack(player)
                     if player.dead():
                         player.death_trigger(f"{player.name} đã gục ngã trước phòng thủ của {self.name}")
     

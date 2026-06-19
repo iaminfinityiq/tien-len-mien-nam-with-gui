@@ -32,6 +32,8 @@ class Player(Entity):
                 self.respawn()
         else:
             super().before_turn()
+            if self.dead():
+                self.death_trigger(f"{self.name} đã chết vì ngộ độc")
     
     def respawn(self) -> None:
         self.hp = self.max_hp
@@ -39,6 +41,6 @@ class Player(Entity):
     
     def death_trigger(self, death_message: str) -> None:
         self.death_time = 10
-        self.at.remove(self)
+        self.at.players.remove(self)
         self.at = None
         super().death_trigger(death_message)
