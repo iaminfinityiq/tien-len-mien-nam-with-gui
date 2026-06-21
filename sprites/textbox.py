@@ -28,5 +28,7 @@ class TextBox(Sprite):
             if self.active:
                 if event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
-                elif event.unicode.isprintable() and len(self.text) + 1 <= self.character_limit:
-                    self.text += event.unicode
+        
+        if event.type == pygame.TEXTINPUT:
+            if self.active:
+                self.text += event.text

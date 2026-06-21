@@ -198,18 +198,35 @@ class Game:
             else:
                 pygame.draw.rect(wd, pygame.Color(255, 0, 0), pygame.Rect(0, self.player_y_dict[scene], 100, 100))
             
-            pygame.draw.rect(wd, pygame.Color(255, 127, 127), pygame.Rect(0, self.player_y_dict[scene] - 40, 100, 20))
-            pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(0, self.player_y_dict[scene] - 40, self.players[0].hp*100//self.players[0].max_hp, 20))
+            pygame.draw.rect(wd, pygame.Color(255, 127, 127), pygame.Rect(0, self.player_y_dict[scene] - 60, 100, 40))
+            pygame.draw.rect(wd, pygame.Color(46, 204, 113), pygame.Rect(0, self.player_y_dict[scene] - 60, self.players[0].hp*100//self.players[0].max_hp, 20))
+            pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(0, self.player_y_dict[scene] - 40, min(self.players[0].poisoned_damage, self.players[0].max_hp)*100//self.players[0].max_hp, 20))
             if 0 <= mouse_pos[0] <= 100 and self.player_y_dict[scene] <= mouse_pos[1] <= self.player_y_dict[scene] + 100:
                 pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(100, self.player_y_dict[scene], 100, 200))
                 text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render(f"HP: {integer_to_text(self.players[0].hp)}/{integer_to_text(self.players[0].max_hp)}", True, pygame.Color(0, 0, 0))
                 wd.blit(text_surface, (105, self.player_y_dict[scene] + 5))
 
-                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Công: {self.players[0].damage}", True, pygame.Color(0, 0, 0))
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Công: {integer_to_text(self.players[0].damage)}", True, pygame.Color(0, 0, 0))
                 wd.blit(text_surface, (105, self.player_y_dict[scene] + 20))
 
-                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Độc: {self.players[0].poison_damage}", True, pygame.Color(0, 0, 0))
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Độc: {integer_to_text(self.players[0].poison_damage)}", True, pygame.Color(0, 0, 0))
                 wd.blit(text_surface, (105, self.player_y_dict[scene] + 35))
+
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Hồi: {integer_to_text(self.players[0].heal_amount)}", True, pygame.Color(0, 0, 0))
+                wd.blit(text_surface, (105, self.player_y_dict[scene] + 50))
+
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Bị độc: {integer_to_text(self.players[0].poisoned_damage)}", True, pygame.Color(0, 0, 0))
+                wd.blit(text_surface, (105, self.player_y_dict[scene] + 65))
+            
+            if self.turn == 1 and self.players[0].at is self.players[1].at:
+                pygame.draw.rect(wd, pygame.Color(255, 60, 60), pygame.Rect(0, self.player_y_dict[scene] - 80, 20, 20))
+                pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(80, self.player_y_dict[scene] - 80, 20, 20))
+                if 0 <= mouse_pos[0] <= 20:
+                    text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("Tấn công", True, pygame.Color(0, 0, 0))
+                    wd.blit(text_surface, (26, self.player_y_dict[scene] - 75))
+                elif 80 <= mouse_pos[0] <= 100:
+                    text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("Độc", True, pygame.Color(0, 0, 0))
+                    wd.blit(text_surface, (41, self.player_y_dict[scene] - 75))
         
         if not self.players[1].dead() and self.players[1] in scene.players:
             if self.turn == 1:
@@ -217,18 +234,35 @@ class Game:
             else:
                 pygame.draw.rect(wd, pygame.Color(255, 0, 0), pygame.Rect(700, self.player_y_dict[scene], 100, 100))
             
-            pygame.draw.rect(wd, pygame.Color(255, 127, 127), pygame.Rect(700, self.player_y_dict[scene] - 40, 100, 20))
-            pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(700, self.player_y_dict[scene] - 40, self.players[1].hp*100//self.players[1].max_hp, 20))
+            pygame.draw.rect(wd, pygame.Color(255, 127, 127), pygame.Rect(700, self.player_y_dict[scene] - 60, 100, 40))
+            pygame.draw.rect(wd, pygame.Color(46, 204, 113), pygame.Rect(700, self.player_y_dict[scene] - 60, self.players[0].hp*100//self.players[0].max_hp, 20))
+            pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(700, self.player_y_dict[scene] - 40, min(self.players[0].poisoned_damage, self.players[0].max_hp)*100//self.players[0].max_hp, 20))
             if 700 <= mouse_pos[0] <= 800 and self.player_y_dict[scene] <= mouse_pos[1] <= self.player_y_dict[scene] + 100:
                 pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(600, self.player_y_dict[scene], 100, 200))
                 text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render(f"HP: {integer_to_text(self.players[1].hp)}/{integer_to_text(self.players[1].max_hp)}", True, pygame.Color(0, 0, 0))
                 wd.blit(text_surface, (605, self.player_y_dict[scene] + 5))
 
-                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Công: {self.players[1].damage}", True, pygame.Color(0, 0, 0))
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Công: {integer_to_text(self.players[1].damage)}", True, pygame.Color(0, 0, 0))
                 wd.blit(text_surface, (605, self.player_y_dict[scene] + 20))
 
-                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Độc: {self.players[1].poison_damage}", True, pygame.Color(0, 0, 0))
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Độc: {integer_to_text(self.players[1].poison_damage)}", True, pygame.Color(0, 0, 0))
                 wd.blit(text_surface, (605, self.player_y_dict[scene] + 35))
+
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Hồi: {integer_to_text(self.players[1].heal_amount)}", True, pygame.Color(0, 0, 0))
+                wd.blit(text_surface, (605, self.player_y_dict[scene] + 50))
+
+                text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Bị độc: {integer_to_text(self.players[1].poisoned_damage)}", True, pygame.Color(0, 0, 0))
+                wd.blit(text_surface, (605, self.player_y_dict[scene] + 65))
+            
+            if self.turn == 0 and self.players[0].at is self.players[1].at:
+                pygame.draw.rect(wd, pygame.Color(255, 60, 60), pygame.Rect(700, self.player_y_dict[scene] - 80, 20, 20))
+                pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(780, self.player_y_dict[scene] - 80, 20, 20))
+                if 700 <= mouse_pos[0] <= 720:
+                    text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("Tấn công", True, pygame.Color(0, 0, 0))
+                    wd.blit(text_surface, (726, self.player_y_dict[scene] - 75))
+                elif 780 <= mouse_pos[0] <= 800:
+                    text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("Độc", True, pygame.Color(0, 0, 0))
+                    wd.blit(text_surface, (741, self.player_y_dict[scene] - 75))
 
         if self.players[self.turn].at.next is scene:
             pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(350, 50, 100, 100))
