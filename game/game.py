@@ -229,11 +229,18 @@ class Game:
 
                 text_surface = pygame.font.SysFont("Consolas", 10, True).render(f"Độc: {self.players[1].poison_damage}", True, pygame.Color(0, 0, 0))
                 wd.blit(text_surface, (605, self.player_y_dict[scene] + 35))
-        
+
         if self.players[self.turn].at.next is scene:
             pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(350, 50, 100, 100))
+            if 350 <= mouse_pos[0] <= 450 and 50 <= mouse_pos[1] <= 150:
+                text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render(f"Đi {'tới' if self.turn == 0 else 'về'} {scene.name}", True, pygame.Color(0, 0, 0))
+                surface_x: int = text_surface.get_size()[0]
+                wd.blit(text_surface, (400 - surface_x // 2, 35))
         elif self.players[self.turn].at.previous is scene:
             pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(350, 50, 100, 100))
+            text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render(f"Đi {'tới' if self.turn == 1 else 'về'} {scene.name}", True, pygame.Color(0, 0, 0))
+            surface_x: int = text_surface.get_size()[0]
+            wd.blit(text_surface, (400 - surface_x // 2, 35))
 
         text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 32, True).render(scene.name, True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (0, 0))
