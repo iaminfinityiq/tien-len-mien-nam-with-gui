@@ -230,11 +230,19 @@ class Game:
             
             if self.turn == 0 and self.players[0].at.tower_owner is self.players[0]:
                 pygame.draw.rect(wd, pygame.Color(255, 60, 60), pygame.Rect(0, self.player_y_dict[scene] - 80, 20, 20))
+                pygame.draw.rect(wd, pygame.Color(76, 175, 80), pygame.Rect(30, self.player_y_dict[scene] - 80, 20, 20))
+                pygame.draw.rect(wd, pygame.Color(129, 199, 132), pygame.Rect(50, self.player_y_dict[scene] - 80, 20, 20))
                 pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(80, self.player_y_dict[scene] - 80, 20, 20))
 
                 if 0 <= mouse_pos[0] <= 20 and self.player_y_dict[scene] - 80 <= mouse_pos[1] <= self.player_y_dict[scene] - 60:
                     text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("+20% sát thương", True, pygame.Color(0, 0, 0))
                     wd.blit(text_surface, (5, self.player_y_dict[scene] - 95))
+                elif 30 <= mouse_pos[0] <= 50 and self.player_y_dict[scene] - 80 <= mouse_pos[1] <= self.player_y_dict[scene] - 60:
+                    text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("+10% HP tối đa", True, pygame.Color(0, 0, 0))
+                    wd.blit(text_surface, (8, self.player_y_dict[scene] - 95))
+                elif 50 <= mouse_pos[0] <= 70 and self.player_y_dict[scene] - 80 <= mouse_pos[1] <= self.player_y_dict[scene] - 60:
+                    text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("+50% hồi", True, pygame.Color(0, 0, 0))
+                    wd.blit(text_surface, (26, self.player_y_dict[scene] - 95))
                 elif 80 <= mouse_pos[0] <= 100 and self.player_y_dict[scene] - 80 <= mouse_pos[1] <= self.player_y_dict[scene] - 60:
                     text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("+20% độc", True, pygame.Color(0, 0, 0))
                     wd.blit(text_surface, (26, self.player_y_dict[scene] - 95))
@@ -246,8 +254,8 @@ class Game:
                 pygame.draw.rect(wd, pygame.Color(255, 0, 0), pygame.Rect(700, self.player_y_dict[scene], 100, 100))
             
             pygame.draw.rect(wd, pygame.Color(255, 127, 127), pygame.Rect(700, self.player_y_dict[scene] - 60, 100, 40))
-            pygame.draw.rect(wd, pygame.Color(46, 204, 113), pygame.Rect(700, self.player_y_dict[scene] - 60, self.players[0].hp*100//self.players[0].max_hp, 20))
-            pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(700, self.player_y_dict[scene] - 40, min(self.players[0].poisoned_damage, self.players[0].max_hp)*100//self.players[0].max_hp, 20))
+            pygame.draw.rect(wd, pygame.Color(46, 204, 113), pygame.Rect(700, self.player_y_dict[scene] - 60, self.players[1].hp*100//self.players[1].max_hp, 20))
+            pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(700, self.player_y_dict[scene] - 40, min(self.players[1].poisoned_damage, self.players[1].max_hp)*100//self.players[1].max_hp, 20))
             if 700 <= mouse_pos[0] <= 800 and self.player_y_dict[scene] <= mouse_pos[1] <= self.player_y_dict[scene] + 100:
                 pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(600, self.player_y_dict[scene], 100, 200))
                 text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render(f"HP: {integer_to_text(self.players[1].hp)}/{integer_to_text(self.players[1].max_hp)}", True, pygame.Color(0, 0, 0))
@@ -277,11 +285,19 @@ class Game:
             
             if self.turn == 1 and self.players[1].at.tower_owner is self.players[1]:
                 pygame.draw.rect(wd, pygame.Color(255, 60, 60), pygame.Rect(700, self.player_y_dict[scene] - 80, 20, 20))
+                pygame.draw.rect(wd, pygame.Color(76, 175, 80), pygame.Rect(730, self.player_y_dict[scene] - 80, 20, 20))
+                pygame.draw.rect(wd, pygame.Color(129, 199, 132), pygame.Rect(750, self.player_y_dict[scene] - 80, 20, 20))
                 pygame.draw.rect(wd, pygame.Color(0, 100, 0), pygame.Rect(780, self.player_y_dict[scene] - 80, 20, 20))
 
                 if 700 <= mouse_pos[0] <= 720 and self.player_y_dict[scene] - 80 <= mouse_pos[1] <= self.player_y_dict[scene] - 60:
                     text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("+20% sát thương", True, pygame.Color(0, 0, 0))
                     wd.blit(text_surface, (705, self.player_y_dict[scene] - 95))
+                elif 730 <= mouse_pos[0] <= 750 and self.player_y_dict[scene] - 80 <= mouse_pos[1] <= self.player_y_dict[scene] - 60:
+                    text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("+10% HP tối đa", True, pygame.Color(0, 0, 0))
+                    wd.blit(text_surface, (708, self.player_y_dict[scene] - 95))
+                elif 750 <= mouse_pos[0] <= 770 and self.player_y_dict[scene] - 80 <= mouse_pos[1] <= self.player_y_dict[scene] - 60:
+                    text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("+50% hồi", True, pygame.Color(0, 0, 0))
+                    wd.blit(text_surface, (726, self.player_y_dict[scene] - 95))
                 elif 780 <= mouse_pos[0] <= 800 and self.player_y_dict[scene] - 80 <= mouse_pos[1] <= self.player_y_dict[scene] - 60:
                     text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render("+20% độc", True, pygame.Color(0, 0, 0))
                     wd.blit(text_surface, (726, self.player_y_dict[scene] - 95))

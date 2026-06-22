@@ -70,12 +70,26 @@ while running:
                         if 0 <= mouse[0] <= 20 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
                             current_game.players[0].damage = int(current_game.players[0].damage * 1.2)
                             finished_running = True
+                        elif 30 <= mouse[0] <= 50 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                            current_game.players[0].hp = int(current_game.players[0].hp * 1.1)
+                            current_game.players[0].max_hp = int(current_game.players[0].max_hp * 1.1)
+                            finished_running = True
+                        elif 50 <= mouse[0] <= 70 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                            current_game.players[0].heal_amount = int(current_game.players[0].heal_amount * 1.5)
+                            finished_running = True
                         elif 80 <= mouse[0] <= 100 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
                             current_game.players[0].poison_damage = int(current_game.players[0].poison_damage * 1.2)
                             finished_running = True
                     else:
                         if 700 <= mouse[0] <= 720 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
                             current_game.players[1].damage = int(current_game.players[1].damage * 1.2)
+                            finished_running = True
+                        elif 730 <= mouse[0] <= 750 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                            current_game.players[1].hp = int(current_game.players[1].hp * 1.1)
+                            current_game.players[1].max_hp = int(current_game.players[1].max_hp * 1.1)
+                            finished_running = True
+                        elif 750 <= mouse[0] <= 770 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                            current_game.players[1].heal_amount = int(current_game.players[1].heal_amount * 1.5)
                             finished_running = True
                         elif 780 <= mouse[0] <= 800 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
                             current_game.players[1].poison_damage = int(current_game.players[1].poison_damage * 1.2)
