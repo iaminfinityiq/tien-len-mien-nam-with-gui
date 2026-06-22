@@ -32,10 +32,10 @@ while running:
                 p1_textbox.handle_event(event)
                 p2_textbox.handle_event(event)
             elif event_number == 11:
-                if (event.key == pygame.K_d or event.key == pygame.K_RIGHT) and current_scene.next is not None:
+                if (event.key == pygame.K_d or event.key == pygame.K_RIGHT) and not current_game.players[current_game.turn].dead() and current_scene.next is not None:
                     current_scene = current_scene.next
                 
-                if (event.key == pygame.K_a or event.key == pygame.K_LEFT) and current_scene.previous is not None:
+                if (event.key == pygame.K_a or event.key == pygame.K_LEFT) and not current_game.players[current_game.turn].dead() and current_scene.previous is not None:
                     current_scene = current_scene.previous
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event_number == 2:
@@ -64,6 +64,21 @@ while running:
                             finished_running = True
                         elif 80 <= mouse[0] <= 100 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
                             current_game.players[0].poisoned_damage += current_game.players[1].poison_damage
+                            finished_running = True
+                elif current_scene.tower_owner == current_game.players[current_game.turn]:
+                    if current_game.turn == 0:
+                        if 0 <= mouse[0] <= 20 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                            current_game.players[0].damage = int(current_game.players[0].damage * 1.2)
+                            finished_running = True
+                        elif 80 <= mouse[0] <= 100 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                            current_game.players[0].poison_damage = int(current_game.players[0].poison_damage * 1.2)
+                            finished_running = True
+                    else:
+                        if 700 <= mouse[0] <= 720 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                            current_game.players[1].damage = int(current_game.players[1].damage * 1.2)
+                            finished_running = True
+                        elif 780 <= mouse[0] <= 800 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                            current_game.players[1].poison_damage = int(current_game.players[1].poison_damage * 1.2)
                             finished_running = True
         elif event.type == pygame.TEXTINPUT:
             if event_number == 2:
