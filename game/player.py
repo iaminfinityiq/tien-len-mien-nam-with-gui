@@ -13,6 +13,7 @@ class Player(Entity):
         self.death_time: int = 0
         self.max_hp: int = 10000
         self.at: Place | None = None
+        self.at_home_tower: int = 0
     
     def attack(self, entity: Entity) -> None:
         super().attack(entity)
@@ -34,9 +35,14 @@ class Player(Entity):
             super().before_turn()
             if self.dead():
                 self.death_trigger(f"{self.name} đã chết vì ngộ độc")
+            elif self.at.tower_owner is self:
+                self.at_home_tower += 1
+            else:
+                self.at_home_tower = 0
     
     def respawn(self) -> None:
         self.hp = self.max_hp
+        self.at_home_tower = 0
         super().death_trigger(f"{self.name} đã hồi sinh")
     
     def death_trigger(self, death_message: str) -> None:

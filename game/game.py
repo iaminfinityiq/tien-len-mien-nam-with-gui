@@ -318,9 +318,16 @@ class Game:
                 wd.blit(text_surface, (400 - surface_x // 2, 35))
         elif self.players[self.turn].at.previous is scene:
             pygame.draw.rect(wd, pygame.Color(128, 128, 128), pygame.Rect(350, 50, 100, 100))
-            text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render(f"Đi {'tới' if self.turn == 1 else 'về'} {scene.name}", True, pygame.Color(0, 0, 0))
-            surface_x: int = text_surface.get_size()[0]
-            wd.blit(text_surface, (400 - surface_x // 2, 35))
+            if 350 <= mouse_pos[0] <= 450 and 50 <= mouse_pos[1] <= 150:
+                text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render(f"Đi {'tới' if self.turn == 1 else 'về'} {scene.name}", True, pygame.Color(0, 0, 0))
+                surface_x: int = text_surface.get_size()[0]
+                wd.blit(text_surface, (400 - surface_x // 2, 35))
+        elif self.players[self.turn].at is scene and not self.players[1-self.turn].dead() and self.players[1-self.turn].at_home_tower >= 10:
+            pygame.draw.rect(wd, pygame.Color(211, 47, 47), pygame.Rect(350, 50, 100, 100))
+            if 350 <= mouse_pos[0] <= 450 and 50 <= mouse_pos[1] <= 150:
+                text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 10, True).render(f"Nút của Kim Jong Un: Thả bom vào {self.players[1-self.turn].at.name}", True, pygame.Color(0, 0, 0))
+                surface_x: int = text_surface.get_size()[0]
+                wd.blit(text_surface, (400 - surface_x // 2, 35))
 
         text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 32, True).render(scene.name, True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (0, 0))

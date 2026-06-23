@@ -50,6 +50,17 @@ while running:
                     current_game.players[current_game.turn].at = current_scene
                     current_scene.players += [current_game.players[current_game.turn]]
                     finished_running = True
+                elif not current_game.players[1-current_game.turn].dead() and current_game.players[1-current_game.turn].at_home_tower >= 10 and current_scene is current_game.players[current_game.turn].at and 350 <= mouse[0] <= 450 and 50 <= mouse[1] <= 150:
+                    current_game.players[1-current_game.turn].hp //= 2
+                    current_game.players[1-current_game.turn].at.hp //= 2
+                    death_place: Place = current_game.players[1-current_game.turn].at
+                    if current_game.players[1-current_game.turn].dead():
+                        current_game.players[1-current_game.turn].death_trigger(f"{current_game.players[1-current_game.turn].name} đã bị quả bom của {current_game.players[current_game.turn].name} hủy diệt ở {death_place.name}")
+                    
+                    if death_place.dead():
+                        death_place.switch_tower_owner(current_game.players[current_game.turn])
+                    
+                    finished_running = True
                 elif current_scene is current_game.players[1-current_game.turn].at and not current_game.players[1-current_game.turn].dead():
                     if current_game.turn == 0:
                         if 700 <= mouse[0] <= 720 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
