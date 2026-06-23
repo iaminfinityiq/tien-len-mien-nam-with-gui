@@ -80,6 +80,9 @@ while running:
                         elif 80 <= mouse[0] <= 100 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
                             current_game.players[0].poison_damage = int(current_game.players[0].poison_damage * 1.2)
                             finished_running = True
+                        elif 0 <= mouse[0] <= 100 and current_game.player_y_dict[current_scene] - 100 <= mouse[1] <= current_game.player_y_dict[current_scene] - 80:
+                            current_game.players[0].hp = min(current_game.players[0].hp + current_game.players[0].heal_amount, current_game.players[0].max_hp)
+                            finished_running = True
                     else:
                         if 700 <= mouse[0] <= 720 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
                             current_game.players[1].damage = int(current_game.players[1].damage * 1.2)
@@ -93,6 +96,9 @@ while running:
                             finished_running = True
                         elif 780 <= mouse[0] <= 800 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
                             current_game.players[1].poison_damage = int(current_game.players[1].poison_damage * 1.2)
+                            finished_running = True
+                        elif 700 <= mouse[0] <= 800 and current_game.player_y_dict[current_scene] - 100 <= mouse[1] <= current_game.player_y_dict[current_scene] - 80:
+                            current_game.players[1].hp = min(current_game.players[1].hp + current_game.players[1].heal_amount, current_game.players[1].max_hp)
                             finished_running = True
         elif event.type == pygame.TEXTINPUT:
             if event_number == 2:
