@@ -50,66 +50,77 @@ while running:
                     current_game.players[current_game.turn].at = current_scene
                     current_scene.players += [current_game.players[current_game.turn]]
                     finished_running = True
-                elif not current_game.players[1-current_game.turn].dead() and current_game.players[1-current_game.turn].at_home_tower >= 10 and current_scene is current_game.players[current_game.turn].at and 350 <= mouse[0] <= 450 and 50 <= mouse[1] <= 150:
-                    current_game.players[1-current_game.turn].hp //= 2
-                    current_game.players[1-current_game.turn].at.hp //= 2
-                    death_place: Place = current_game.players[1-current_game.turn].at
-                    if current_game.players[1-current_game.turn].dead():
-                        current_game.players[1-current_game.turn].death_trigger(f"{current_game.players[1-current_game.turn].name} đã bị quả bom của {current_game.players[current_game.turn].name} hủy diệt ở {death_place.name}")
+                elif current_scene is current_game.players[current_game.turn].at:
+                    if not current_game.players[1-current_game.turn].dead() and current_game.players[1-current_game.turn].at_home_tower >= 10:
+                        current_game.players[1-current_game.turn].hp //= 2
+                        current_game.players[1-current_game.turn].at.hp //= 2
+                        death_place: Place = current_game.players[1-current_game.turn].at
+                        if current_game.players[1-current_game.turn].dead():
+                            current_game.players[1-current_game.turn].death_trigger(f"{current_game.players[1-current_game.turn].name} đã bị quả bom của {current_game.players[current_game.turn].name} hủy diệt ở {death_place.name}")
+                        
+                        if death_place.dead():
+                            death_place.switch_tower_owner(current_game.players[current_game.turn])
+                        
+                        finished_running = True
                     
-                    if death_place.dead():
-                        death_place.switch_tower_owner(current_game.players[current_game.turn])
+                    if current_scene is current_game.players[1-current_game.turn].at and not current_game.players[1-current_game.turn].dead():
+                        if current_game.turn == 0:
+                            if 700 <= mouse[0] <= 720 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[0].attack(current_game.players[1])
+                                finished_running = True
+                            elif 780 <= mouse[0] <= 800 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[1].poisoned_damage += current_game.players[0].poison_damage
+                                finished_running = True
+                        else:
+                            if 0 <= mouse[0] <= 20 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[1].attack(current_game.players[0])
+                                finished_running = True
+                            elif 80 <= mouse[0] <= 100 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[0].poisoned_damage += current_game.players[1].poison_damage
+                                finished_running = True
                     
-                    finished_running = True
-                elif current_scene is current_game.players[1-current_game.turn].at and not current_game.players[1-current_game.turn].dead():
-                    if current_game.turn == 0:
-                        if 700 <= mouse[0] <= 720 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[0].attack(current_game.players[1])
-                            finished_running = True
-                        elif 780 <= mouse[0] <= 800 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[1].poisoned_damage += current_game.players[0].poison_damage
-                            finished_running = True
+                    if current_scene.tower_owner is current_game.players[current_game.turn]:
+                        if current_game.turn == 0:
+                            if 0 <= mouse[0] <= 20 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[0].damage = int(current_game.players[0].damage * 1.2)
+                                finished_running = True
+                            elif 30 <= mouse[0] <= 50 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[0].hp = int(current_game.players[0].hp * 1.1)
+                                current_game.players[0].max_hp = int(current_game.players[0].max_hp * 1.1)
+                                finished_running = True
+                            elif 50 <= mouse[0] <= 70 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[0].heal_amount = int(current_game.players[0].heal_amount * 1.5)
+                                finished_running = True
+                            elif 80 <= mouse[0] <= 100 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[0].poison_damage = int(current_game.players[0].poison_damage * 1.2)
+                                finished_running = True
+                            elif 0 <= mouse[0] <= 100 and current_game.player_y_dict[current_scene] - 100 <= mouse[1] <= current_game.player_y_dict[current_scene] - 80:
+                                current_game.players[0].hp = min(current_game.players[0].hp + current_game.players[0].heal_amount, current_game.players[0].max_hp)
+                                finished_running = True
+                        else:
+                            if 700 <= mouse[0] <= 720 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[1].damage = int(current_game.players[1].damage * 1.2)
+                                finished_running = True
+                            elif 730 <= mouse[0] <= 750 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[1].hp = int(current_game.players[1].hp * 1.1)
+                                current_game.players[1].max_hp = int(current_game.players[1].max_hp * 1.1)
+                                finished_running = True
+                            elif 750 <= mouse[0] <= 770 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[1].heal_amount = int(current_game.players[1].heal_amount * 1.5)
+                                finished_running = True
+                            elif 780 <= mouse[0] <= 800 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
+                                current_game.players[1].poison_damage = int(current_game.players[1].poison_damage * 1.2)
+                                finished_running = True
+                            elif 700 <= mouse[0] <= 800 and current_game.player_y_dict[current_scene] - 100 <= mouse[1] <= current_game.player_y_dict[current_scene] - 80:
+                                current_game.players[1].hp = min(current_game.players[1].hp + current_game.players[1].heal_amount, current_game.players[1].max_hp)
+                                finished_running = True
                     else:
-                        if 0 <= mouse[0] <= 20 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[1].attack(current_game.players[0])
+                        if current_game.attack_tower_button[current_scene][0] <= mouse[0] <= current_game.attack_tower_button[current_scene][0] + 20 and current_game.attack_tower_button[current_scene][1] <= mouse[1] <= current_game.attack_tower_button[current_scene][1] + 20:
+                            current_game.players[current_game.turn].attack(current_scene)
                             finished_running = True
-                        elif 80 <= mouse[0] <= 100 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[0].poisoned_damage += current_game.players[1].poison_damage
-                            finished_running = True
-                elif current_scene.tower_owner == current_game.players[current_game.turn]:
-                    if current_game.turn == 0:
-                        if 0 <= mouse[0] <= 20 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[0].damage = int(current_game.players[0].damage * 1.2)
-                            finished_running = True
-                        elif 30 <= mouse[0] <= 50 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[0].hp = int(current_game.players[0].hp * 1.1)
-                            current_game.players[0].max_hp = int(current_game.players[0].max_hp * 1.1)
-                            finished_running = True
-                        elif 50 <= mouse[0] <= 70 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[0].heal_amount = int(current_game.players[0].heal_amount * 1.5)
-                            finished_running = True
-                        elif 80 <= mouse[0] <= 100 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[0].poison_damage = int(current_game.players[0].poison_damage * 1.2)
-                            finished_running = True
-                        elif 0 <= mouse[0] <= 100 and current_game.player_y_dict[current_scene] - 100 <= mouse[1] <= current_game.player_y_dict[current_scene] - 80:
-                            current_game.players[0].hp = min(current_game.players[0].hp + current_game.players[0].heal_amount, current_game.players[0].max_hp)
-                            finished_running = True
-                    else:
-                        if 700 <= mouse[0] <= 720 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[1].damage = int(current_game.players[1].damage * 1.2)
-                            finished_running = True
-                        elif 730 <= mouse[0] <= 750 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[1].hp = int(current_game.players[1].hp * 1.1)
-                            current_game.players[1].max_hp = int(current_game.players[1].max_hp * 1.1)
-                            finished_running = True
-                        elif 750 <= mouse[0] <= 770 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[1].heal_amount = int(current_game.players[1].heal_amount * 1.5)
-                            finished_running = True
-                        elif 780 <= mouse[0] <= 800 and current_game.player_y_dict[current_scene] - 80 <= mouse[1] <= current_game.player_y_dict[current_scene] - 60:
-                            current_game.players[1].poison_damage = int(current_game.players[1].poison_damage * 1.2)
-                            finished_running = True
-                        elif 700 <= mouse[0] <= 800 and current_game.player_y_dict[current_scene] - 100 <= mouse[1] <= current_game.player_y_dict[current_scene] - 80:
-                            current_game.players[1].hp = min(current_game.players[1].hp + current_game.players[1].heal_amount, current_game.players[1].max_hp)
+                        elif current_game.poison_tower_button[current_scene][0] <= mouse[0] <= current_game.poison_tower_button[current_scene][0] + 20 and current_game.poison_tower_button[current_scene][1] <= mouse[1] <= current_game.poison_tower_button[current_scene][1] + 20:
+                            current_scene.poisoned_damage += current_game.players[current_game.turn].poison_damage
+                            current_scene.who_poisoned_last = current_game.players[current_game.turn]
                             finished_running = True
         elif event.type == pygame.TEXTINPUT:
             if event_number == 2:
