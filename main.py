@@ -54,7 +54,13 @@ while running:
                     if not current_game.players[1-current_game.turn].dead() and current_game.players[1-current_game.turn].at_home_tower >= 10:
                         current_game.players[1-current_game.turn].hp //= 2
                         current_game.players[1-current_game.turn].at.hp //= 2
+                        if current_game.players[current_game.turn].at is current_scene:
+                            current_game.players[current_game.turn].hp //= 2
+
                         death_place: Place = current_game.players[1-current_game.turn].at
+                        if current_game.players[current_game.turn].dead():
+                            current_game.players[1-current_game.turn].death_trigger(f"{current_game.players[1-current_game.turn].name} đã bị quả bom của {current_game.players[current_game.turn].name} hủy diệt ở {death_place.name}")
+
                         if current_game.players[1-current_game.turn].dead():
                             current_game.players[1-current_game.turn].death_trigger(f"{current_game.players[1-current_game.turn].name} đã bị quả bom của {current_game.players[current_game.turn].name} hủy diệt ở {death_place.name}")
                         
