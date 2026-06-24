@@ -382,5 +382,8 @@ class Game:
                 surface_x: int = text_surface.get_size()[0]
                 wd.blit(text_surface, (400 - surface_x // 2, 35))
 
-        text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 32, True).render(scene.name, True, pygame.Color(0, 0, 0))
+        text_surface: pygame.Surface = pygame.font.SysFont("Consolas", 32, True).render(f"{scene.name}: {integer_to_text(scene.hp)}/100.0K", True, pygame.Color(0, 0, 0))
         wd.blit(text_surface, (0, 0))
+
+        text_surface = pygame.font.SysFont("Consolas", 32, True).render(f"Bị độc: {integer_to_text(scene.poisoned_damage)}", True, pygame.Color(0, 0, 0))
+        wd.blit(text_surface, (0, 32))
