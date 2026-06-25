@@ -54,7 +54,7 @@ while running:
                     if not current_game.players[1-current_game.turn].dead() and current_game.players[1-current_game.turn].at_home_tower >= 10:
                         current_game.players[1-current_game.turn].hp //= 2
                         current_game.players[1-current_game.turn].at.hp //= 2
-                        if current_game.players[current_game.turn].at is current_scene:
+                        if current_game.players[current_game.turn].at is current_game.players[1-current_game.turn].at:
                             current_game.players[current_game.turn].hp //= 2
 
                         death_place: Place = current_game.players[1-current_game.turn].at
